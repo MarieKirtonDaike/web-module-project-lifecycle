@@ -47,7 +47,7 @@ export default class App extends React.Component {
    
   }
 
-togglecompleted = id => () =>{
+togglecompleted = id => {
     axios.patch(`${URL}/${id}`)
     .then(res=>{
       this.setState({...this.state, todos: [this.state.todos.map(td=>{
@@ -61,12 +61,15 @@ togglecompleted = id => () =>{
     .catch(err=>{this.setState({...this.state, error: err.response.data.message})})
   }
    
-  
+  onclickhandler = id => e => {
+    this.togglecompleted(id)
+  }
+
   render() {
     return (
       <>
         <h2> Error: {this.state.error}</h2>
-      <TodoList todos={this.state.todos} togglecompleted={this.togglecompleted}/>
+      <TodoList todos={this.state.todos} onclickhandler={this.onclickhandler}/>
           
        
         <form onSubmit={this.onsubmit}>
