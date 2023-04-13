@@ -8,6 +8,9 @@ const URL = 'http://localhost:9000/api/todos'
 export default class App extends React.Component {
     state = {
       todos: [],
+      error: "",
+      todonameinput: "",
+
     }
 
   fetchalltodos = () =>{
@@ -15,13 +18,16 @@ export default class App extends React.Component {
     .then(res=>{
       this.setState({...this.state, todos: res.data.data})
     })
-    .catch(err =>{debugger})
+    .catch(err =>{this.setState({...this.state, error: err.response.data.message})})
   };
 
   componentDidMount(){
     this.fetchalltodos()
   }
-  
+  oninputchange = evt => {
+    const {value} = evt.target
+    this.setState({...this.state, todonameinput: value})
+  }
   render() {
     return (
       <>
@@ -30,7 +36,7 @@ export default class App extends React.Component {
           {this.state.todos.map(td=> {return (<li key={td.id}>{td.name}</li>)})}
         </ul>
         <form >
-          <input  type="text" />
+          <input  value={this.state.todonameinput} onChange={this.oninputchange} type="text" />
           <button >ADD TODO</button>
           <button> CLEAR COMPLETED</button>
         </form>
